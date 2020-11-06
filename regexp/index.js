@@ -23,15 +23,19 @@ document.querySelectorAll('[data-show]').forEach(function (button) {
         document.querySelector('#' + e.currentTarget.getAttribute('data-show')).classList.remove('d-none');
 
         //var description = document.querySelector('[name="description"]');
-        //var word = description.match(/\+\+(.*?)\+\+/g);
+        //var string = description.match(/\+\+(.*?)\+\+/g);
         //var newDescription = description.replace(/\+\+(.*?)\+\+/g, (word));
 
         //console.log(newDescription);
 
-        $('.btn').click(function() {
-            $(this).siblings().removeClass('active');
-            $(this).addClass('active');
+        $('.btn-group').on('click', '.btn', function() {
+            $(this).addClass('active').siblings().removeClass('active');
         });
+
+        // $('.btn').click(function() {
+        //     $(this).siblings().removeClass('active');
+        //     $(this).addClass('active');
+        // });
 
     });
 });
