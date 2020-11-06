@@ -7,9 +7,7 @@ document.querySelector('#user-form').addEventListener('submit', function (e) {
     var pass = document.querySelector('[name="password"]');
 
     var ruleFullName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
-    //var ruleEmail = /^([^.][a-zA-Z0-9-.]+)[^.]@[^.]([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)[^.]$/;
     var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
-
     var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
 
     fullName.style.backgroundColor = ruleFullName.test(fullName.value) ? '#C2E0C6' : '#F9D0C4';
@@ -24,6 +22,16 @@ document.querySelectorAll('[data-show]').forEach(function (button) {
 
         document.querySelector('#' + e.currentTarget.getAttribute('data-show')).classList.remove('d-none');
 
+        //var description = document.querySelector('[name="description"]');
+        //var word = description.match(/\+\+(.*?)\+\+/g);
+        //var newDescription = description.replace(/\+\+(.*?)\+\+/g, (word));
+
+        //console.log(newDescription);
+
+        $('.btn').click(function() {
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+        });
 
     });
 });
