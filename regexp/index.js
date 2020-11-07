@@ -27,18 +27,18 @@ document.querySelectorAll('[data-show]').forEach(function (button) {
         var ruleDescriptionS = /\+\+(.*?)\+\+|--(.*?)--/g;
         //var ruleDescriptionI = /--(.*?)--/g;
         var ruleDescriptionImg = /\((https:\/\/)(.*?)(\.jpg|\.png)\)/gi;
-        var ruleDescriptionLink =
+        //var ruleDescriptionLink =
 
         newDescription = description.value.replaceAll(ruleDescriptionS , '<strong>$1</strong> , <i>$2</i>');
         //newDescription = description.value.replaceAll(, '<i>$1</i>');
 
         newDescriptionImg = newDescription.replaceAll(ruleDescriptionImg , '<img src="$1$2$3"/>' );
 
-        newDescriptioLink = newDescriptionImg.replaceAll(ruleDescriptionLink , '' );
+        //newDescriptioLink = newDescriptionImg.replaceAll(ruleDescriptionLink , '' );
 
 
 
-        preview.innerHTML = newDescriptionLink;
+        preview.innerHTML = newDescriptionImg;
 
     });
 
