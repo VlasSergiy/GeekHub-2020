@@ -19,23 +19,30 @@ document.querySelectorAll('[data-show]').forEach(function (button) {
     button.addEventListener('click', function (e) {
         document.querySelector('#description').classList.add('d-none');
         document.querySelector('#preview').classList.add('d-none');
-
         document.querySelector('#' + e.currentTarget.getAttribute('data-show')).classList.remove('d-none');
 
-        //var description = document.querySelector('[name="description"]');
-        //var string = description.match(/\+\+(.*?)\+\+/g);
-        //var newDescription = description.replace(/\+\+(.*?)\+\+/g, (word));
 
-        //console.log(newDescription);
+        var preview = document.querySelector('#preview');
+        var description = document.querySelector('#description');
+        var ruleDescriptionS = /\+\+(.*?)\+\+|--(.*?)--/g;
+        //var ruleDescriptionI = /--(.*?)--/g;
+        var ruleDescriptionImg = /\((https:\/\/)(.*?)(\.jpg|\.png)\)/gi;
+        var ruleDescriptionLink =
+
+        newDescription = description.value.replaceAll(ruleDescriptionS , '<strong>$1</strong> , <i>$2</i>');
+        //newDescription = description.value.replaceAll(, '<i>$1</i>');
+
+        newDescriptionImg = newDescription.replaceAll(ruleDescriptionImg , '<img src="$1$2$3"/>' );
+
+        newDescriptioLink = newDescriptionImg.replaceAll(ruleDescriptionLink , '' );
+
+
+
+        preview.innerHTML = newDescriptionLink;
+
+    });
 
         $('.btn-group').on('click', '.btn', function() {
-            $(this).addClass('active').siblings().removeClass('active');
-        });
-
-        // $('.btn').click(function() {
-        //     $(this).siblings().removeClass('active');
-        //     $(this).addClass('active');
-        // });
-
+        $(this).addClass('active').siblings().removeClass('active');
     });
 });
