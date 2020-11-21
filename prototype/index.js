@@ -3,22 +3,25 @@ function Csv() {
 }
 
 Csv.prototype.parse = function(string, separator) {
-    var separators = ['\,', '\.', '\t'];
-    var allRows = string.split(/\r?\n|\r/);
+    const separators = [',', '.', '\t'];
+    let allRows = string.split(/\r?\n|\r/);
+    let defSeparator = separator;
 
-    if (!separator) {
+    if (!defSeparator) {
         separators.forEach(function(elem) {
-            if ((allRows[0].match(new RegExp(elem)) || []).length > 0 && (allRows[0].match(new RegExp(elem)) || []).length == (allRows[0].match(new RegExp(elem)) || []).length) {
-                separator = elem;
+            if (allRows[0].split(elem).length - 1 > 0
+                && allRows[0].split(elem).length === allRows[1].split(elem).length
+            ) {
+                defSeparator = elem;
             }
         });
     }
 
-    return allRows.map(item => item.split(separator));
+    return allRows.map(item => item.split(defSeparator));
 };
 
 Csv.prototype.generate = function(array, separator) {
-    var result = '';
+    let result = '';
     array.forEach(function(elem, i) {
         if (!separator) {
             result += elem + '\r\n';
