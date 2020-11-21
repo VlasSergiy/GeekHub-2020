@@ -17,4 +17,14 @@ Csv.prototype.parse = function(string, separator) {
     return allRows.map(item => item.split(separator));
 };
 
-Csv.prototype.generate = function(array, separator) {};
+Csv.prototype.generate = function(array, separator) {
+    var result = '';
+    array.forEach(function(elem, i) {
+        if (!separator) {
+            result += elem + '\r\n';
+        } else {
+            result += elem.join(separator) + '\r\n';
+        }
+    });
+    return result;
+};
