@@ -70,4 +70,10 @@ CsvArray.prototype.generate = function generate(separator) {
     return result;
 }
 
+CsvArray.prototype.getCell = function getCell(cell) {
+    const alphabet = 'ABCDEFGHIJKLMNOPRQSTUVWXYZ';
+    let column = alphabet.indexOf(cell.charAt(0));
+    let row = cell.charAt(1).valueOf() - 1;
+    return this[row][column];
+}
 
