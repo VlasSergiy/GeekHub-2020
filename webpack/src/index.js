@@ -1,2 +1,2 @@
-import "./style.css";
+import "./style.less";
 console.log("Hello webpack!");
