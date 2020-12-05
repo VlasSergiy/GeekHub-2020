@@ -18,12 +18,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
+var alpha = 'abcdfgh';
 function Table(props) {
   var columns = props.columns,
       rows = props.rows,
       cell = props.cell,
       data = props.data;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null));
+  var table = [];
+  var headers = [];
+  var rowStart;
+  var colStart;
+
+  if (cell) {
+    cell = cell.match(/^([a-z]+)(\d+)$/);
+    colStart = alpha.indexOf(cell[1]);
+    rowStart = Number(cell[2]) - 1;
+  }
+
+  for (var i = 0; i < columns; i++) {
+    headers.push(alpha.charAt(i).toUpperCase());
+  }
+
+  for (var _i = 0; _i < rows; _i++) {
+    var row = [];
+    table.push(row);
+
+    for (var j = 0; j < columns; j++) {
+      var value = '';
+
+      if (_i >= rowStart && j >= colStart && _i - rowStart < data.length && j - colStart < data[0].length) {
+        value = data[_i - rowStart][j - colStart];
+      }
+
+      row.push(value);
+    }
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "\xA0"), headers.map(function (letter) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", {
+      key: letter
+    }, letter);
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, table.map(function (row, i) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, i + 1), row.map(function (cell) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+        value: cell
+      }));
+    }));
+  })));
 }
 ;
 
