@@ -1,5 +1,4 @@
-const getUserModule = () =>
-  import(/* webpackChunkName: "usersAPI" */ "./common/usersAPI");
+const getUserModule = () => import("./common/usersAPI");
 
 const btn = document.getElementById("btn");
 
