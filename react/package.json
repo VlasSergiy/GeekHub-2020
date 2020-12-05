@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {},
-  "author": "Sergii Kliuchnyk <redexp@ukr.net> (https://github.com/redexp)",
+  "author": "Serhii Vlasenko <vlas.sergiy@gmail.com> (https://github.com/VlasSergiy)",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.12.9",
