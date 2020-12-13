@@ -1,69 +1,72 @@
-import React, {PureComponent} from 'react';
-
-const ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
-const ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
-const rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
-const ruleHomePhone = /^(?!0)\d{6}$/;
-const ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
+import React, { PureComponent } from 'react';
 
 export default class UserForm extends PureComponent {
-
   state = {
     full_name: '',
     email: '',
     pass: '',
-    formErrors: {full_name: '', email: '', pass: ''},
-    full_nameValid: false,
-    emailValid: false,
-    passValid: false
+    full_nameValid: true,
+    emailValid: true,
+    passValid: true
   };
 
   setInputValue = (name, value) => {
-    this.setState({[name]: value},
-      () => { this.validateField(name, value) });
-  }
+    this.setState({ [name]: value }, () => {
+      this.validateField(name, value);
+    });
+  };
 
   validateField(fieldName, value) {
-    let fieldValidationErrors = this.state.formErrors;
     let full_nameValid = this.state.full_nameValid;
     let emailValid = this.state.emailValid;
     let passValid = this.state.passValid;
 
-    switch(fieldName) {
-      case 'full_name':
+    const ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
+    const ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
+    const rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
+    const ruleHomePhone = /^(?!0)\d{6}$/;
+    const ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
+
+    switch (fieldName) {
+      case "full_name":
         full_nameValid = value.match(ruleName);
-        fieldValidationErrors.full_name = full_nameValid ? '' : ' is invalid';
         break;
-      case 'email':
-        emailValid  = value.match(ruleEmail);
-        fieldValidationErrors.email = emailValid ? '': ' is too short';
+      case "email":
+        emailValid = value.match(ruleEmail);
         break;
-      case 'pass':
-        passValid  = value.match(rulePass);
-        fieldValidationErrors.pass = passValid ? '': ' is too short';
+      case "pass":
+        passValid = value.match(rulePass);
         break;
       default:
         break;
     }
-    this.setState({formErrors: fieldValidationErrors,
+    this.setState({
       full_nameValid: full_nameValid,
       emailValid: emailValid,
-      passValid: passValid,
-
-    });//, this.validateForm);
+      passValid: passValid
+    }); //, this.validateForm);
   }
 
   errorClass(error) {
-    return(error.length === 0 ? '' : 'is-invalid');
+    return error ? '' : "is-invalid";
   }
 
-  render(){
+  render() {
     return (
       <div className="container p-5">
         <form id="user-form" role="form">
-          <Name onChangedValue={this.setInputValue} isError={this.errorClass(this.state.formErrors.full_name)}/>
-          <Email onChangedValue={this.setInputValue} isError={this.errorClass(this.state.formErrors.email)}/>
-          <Password onChangedValue={this.setInputValue} isError={this.errorClass(this.state.formErrors.pass)}/>
+          <Name
+            onChangedValue={this.setInputValue}
+            isError={this.errorClass(this.state.full_nameValid)}
+          />
+          <Email
+            onChangedValue={this.setInputValue}
+            isError={this.errorClass(this.state.emailValid)}
+          />
+          <Password
+            onChangedValue={this.setInputValue}
+            isError={this.errorClass(this.state.passValid)}
+          />
           {/*<div>*/}
           {/*  <label>Phones</label>*/}
           {/*  <Phones name={this.user.phones}/>*/}
@@ -76,13 +79,11 @@ export default class UserForm extends PureComponent {
 }
 
 class Name extends PureComponent {
-
-  changedValue = (e) => {
+  changedValue = e => {
     this.props.onChangedValue(e.target.name, e.target.value);
-  }
+  };
 
   render() {
-
     return (
       <div className="form-group">
         <label>Name</label>
@@ -94,22 +95,20 @@ class Name extends PureComponent {
         />
 
         <small className="form-text text-muted">
-          Обовʼязково прізвище, імʼя та по батькові. Тільки літерами українскього алфавіту
+          Обовʼязково прізвище, імʼя та по батькові. Тільки літерами
+          українскього алфавіту
         </small>
-
       </div>
     );
   }
 }
 
 class Email extends PureComponent {
-
-  changedValue = (e) => {
+  changedValue = e => {
     this.props.onChangedValue(e.target.name, e.target.value);
-  }
+  };
 
   render() {
-
     return (
       <div className="form-group">
         <label>Email</label>
@@ -120,22 +119,17 @@ class Email extends PureComponent {
           onChange={this.changedValue}
         />
 
-        <small className="form-text text-muted">
-          Адреса електронної пошти
-        </small>
-
+        <small className="form-text text-muted">Адреса електронної пошти</small>
       </div>
     );
   }
 }
 class Password extends PureComponent {
-
-  changedValue = (e) => {
+  changedValue = e => {
     this.props.onChangedValue(e.target.name, e.target.value);
-  }
+  };
 
   render() {
-
     return (
       <div className="form-group">
         <label>Password</label>
@@ -147,9 +141,9 @@ class Password extends PureComponent {
         />
 
         <small className="form-text text-muted">
-          Мінімум 8 літер. Обовʼязково повинні бути великі та малі літери англійського алфавіту та числа
+          Мінімум 8 літер. Обовʼязково повинні бути великі та малі літери
+          англійського алфавіту та числа
         </small>
-
       </div>
     );
   }

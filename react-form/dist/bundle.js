@@ -42,11 +42,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-var ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
-var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
-var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
-var ruleHomePhone = /^(?!0)\d{6}$/;
-var ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
 
 var UserForm = /*#__PURE__*/function (_PureComponent) {
   _inherits(UserForm, _PureComponent);
@@ -68,14 +63,9 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
       full_name: '',
       email: '',
       pass: '',
-      formErrors: {
-        full_name: '',
-        email: '',
-        pass: ''
-      },
-      full_nameValid: false,
-      emailValid: false,
-      passValid: false
+      full_nameValid: true,
+      emailValid: true,
+      passValid: true
     });
 
     _defineProperty(_assertThisInitialized(_this), "setInputValue", function (name, value) {
@@ -90,25 +80,26 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
   _createClass(UserForm, [{
     key: "validateField",
     value: function validateField(fieldName, value) {
-      var fieldValidationErrors = this.state.formErrors;
       var full_nameValid = this.state.full_nameValid;
       var emailValid = this.state.emailValid;
       var passValid = this.state.passValid;
+      var ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
+      var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
+      var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
+      var ruleHomePhone = /^(?!0)\d{6}$/;
+      var ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
 
       switch (fieldName) {
-        case 'full_name':
+        case "full_name":
           full_nameValid = value.match(ruleName);
-          fieldValidationErrors.full_name = full_nameValid ? '' : ' is invalid';
           break;
 
-        case 'email':
+        case "email":
           emailValid = value.match(ruleEmail);
-          fieldValidationErrors.email = emailValid ? '' : ' is too short';
           break;
 
-        case 'pass':
+        case "pass":
           passValid = value.match(rulePass);
-          fieldValidationErrors.pass = passValid ? '' : ' is too short';
           break;
 
         default:
@@ -116,7 +107,6 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
       }
 
       this.setState({
-        formErrors: fieldValidationErrors,
         full_nameValid: full_nameValid,
         emailValid: emailValid,
         passValid: passValid
@@ -125,7 +115,7 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
   }, {
     key: "errorClass",
     value: function errorClass(error) {
-      return error.length === 0 ? '' : 'is-invalid';
+      return error ? '' : "is-invalid";
     }
   }, {
     key: "render",
@@ -137,13 +127,13 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
         role: "form"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Name, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.formErrors.full_name)
+        isError: this.errorClass(this.state.full_nameValid)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Email, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.formErrors.email)
+        isError: this.errorClass(this.state.emailValid)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Password, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.formErrors.pass)
+        isError: this.errorClass(this.state.passValid)
       })));
     }
   }]);
