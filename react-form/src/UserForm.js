@@ -3,8 +3,8 @@ import React, {PureComponent} from 'react';
 const ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
 const ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
 const rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
-const validHomePhone = / /;
-const validMobPhone = / /;
+const ruleHomePhone = /^(?!0)\d{6}$/;
+const ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
 
 export default class UserForm extends PureComponent {
 
@@ -39,7 +39,7 @@ export default class UserForm extends PureComponent {
         fieldValidationErrors.email = emailValid ? '': ' is too short';
         break;
       case 'pass':
-        emailValid  = value.match(rulePass);
+        passValid  = value.match(rulePass);
         fieldValidationErrors.pass = passValid ? '': ' is too short';
         break;
       default:
@@ -48,7 +48,7 @@ export default class UserForm extends PureComponent {
     this.setState({formErrors: fieldValidationErrors,
       full_nameValid: full_nameValid,
       emailValid: emailValid,
-      passValid: passValid
+      passValid: passValid,
 
     });//, this.validateForm);
   }
@@ -154,5 +154,5 @@ class Password extends PureComponent {
     );
   }
 }
-// class Password extends PureComponent {}
+
 // class Phones extends PureComponent {}

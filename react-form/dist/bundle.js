@@ -45,8 +45,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
 var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
 var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
-var validHomePhone = / /;
-var validMobPhone = / /;
+var ruleHomePhone = /^(?!0)\d{6}$/;
+var ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
 
 var UserForm = /*#__PURE__*/function (_PureComponent) {
   _inherits(UserForm, _PureComponent);
@@ -107,7 +107,7 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
           break;
 
         case 'pass':
-          emailValid = value.match(rulePass);
+          passValid = value.match(rulePass);
           fieldValidationErrors.pass = passValid ? '' : ' is too short';
           break;
 
@@ -277,8 +277,7 @@ var Password = /*#__PURE__*/function (_PureComponent4) {
   }]);
 
   return Password;
-}(react__WEBPACK_IMPORTED_MODULE_0__.PureComponent); // class Password extends PureComponent {}
-// class Phones extends PureComponent {}
+}(react__WEBPACK_IMPORTED_MODULE_0__.PureComponent); // class Phones extends PureComponent {}
 
 /***/ }),
 
