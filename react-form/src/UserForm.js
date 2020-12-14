@@ -35,7 +35,7 @@ export default class UserForm extends PureComponent {
 
   handleAddPhone = () => {
     let phonesList = [...this.state.phones];
-    phonesList.push({ number: '', type: 'home' });
+    phonesList.push({ number: '', type: 'home', isValid: true });
     this.setState({ phones: phonesList });
   };
 
@@ -46,16 +46,17 @@ export default class UserForm extends PureComponent {
     let phonesList = [...this.state.phones];
     phonesList[index][phoneProperty] = value;
     this.setState({ phones: phonesList }, () => {
-      this.validatePhoneField(phonesList, index, value);
+      this.validatePhoneField(phonesList, index);
     });
   };
 
-  validatePhoneField(phoneList, index, value) {
+  validatePhoneField(phoneList, index) {
     const ruleHomePhone = /^(?!0)\d{6}$/;
     const ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
 
     let phoneObj = phoneList[index];
     let isValidPhone = true;
+    let value = phoneObj['number'];
 
     switch (phoneObj['type']) {
       case 'home':
@@ -74,12 +75,9 @@ export default class UserForm extends PureComponent {
       )
     }));
 
-    // console.log(isValidPhone);
-    // console.log(value);
+    console.log(isValidPhone);
+    console.log(value);
 
-    //let result = [...this.state.phones];
-    //result.push(phoneObj);
-    //this.setState({ phones: result });
   }
 
   validateField(fieldName, value) {
@@ -137,6 +135,7 @@ export default class UserForm extends PureComponent {
             onDelete={this.handleDeletePhone}
             onAdd={this.handleAddPhone}
             phones={this.state.phones}
+            isError={this.errorClass}
           />
         </form>
         {/*<div style={{ marginTop: 20 }}>{JSON.stringify(this.state)}</div>*/}
@@ -234,10 +233,10 @@ class Phones extends PureComponent {
 
     this.props.phones.map((x, i) => {
       phonesSection.push(
-        <div className='input-group mb-3'>
+        <div className='input-group mb-3' key={i}>
           <input
             type='text'
-            className='form-control'
+            className={`form-control ${this.props.isError(x.isValid)}`}
             name='phone-number'
             value={x.number}
             onChange={e => this.changedValue(e, i)}

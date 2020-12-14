@@ -116,7 +116,8 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
 
       phonesList.push({
         number: '',
-        type: 'home'
+        type: 'home',
+        isValid: true
       });
 
       _this.setState({
@@ -137,7 +138,7 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
       _this.setState({
         phones: phonesList
       }, function () {
-        _this.validatePhoneField(phonesList, index, value);
+        _this.validatePhoneField(phonesList, index);
       });
     });
 
@@ -146,11 +147,12 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
 
   _createClass(UserForm, [{
     key: "validatePhoneField",
-    value: function validatePhoneField(phoneList, index, value) {
+    value: function validatePhoneField(phoneList, index) {
       var ruleHomePhone = /^(?!0)\d{6}$/;
       var ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
       var phoneObj = phoneList[index];
       var isValidPhone = true;
+      var value = phoneObj['number'];
 
       switch (phoneObj['type']) {
         case 'home':
@@ -173,11 +175,9 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
             }) : el;
           })
         };
-      }); // console.log(isValidPhone);
-      // console.log(value);
-      //let result = [...this.state.phones];
-      //result.push(phoneObj);
-      //this.setState({ phones: result });
+      });
+      console.log(isValidPhone);
+      console.log(value);
     }
   }, {
     key: "validateField",
@@ -237,7 +237,8 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
         onChangedValue: this.setPhoneValue,
         onDelete: this.handleDeletePhone,
         onAdd: this.handleAddPhone,
-        phones: this.state.phones
+        phones: this.state.phones,
+        isError: this.errorClass
       })));
     }
   }]);
@@ -406,10 +407,11 @@ var Phones = /*#__PURE__*/function (_PureComponent5) {
 
       _this5.props.phones.map(function (x, i) {
         phonesSection.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-          className: "input-group mb-3"
+          className: "input-group mb-3",
+          key: i
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
           type: "text",
-          className: "form-control",
+          className: "form-control ".concat(_this5.props.isError(x.isValid)),
           name: "phone-number",
           value: x.number,
           onChange: function onChange(e) {
