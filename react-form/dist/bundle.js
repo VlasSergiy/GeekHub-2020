@@ -19,6 +19,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -60,17 +76,68 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      full_name: '',
-      email: '',
-      pass: '',
-      full_nameValid: true,
-      emailValid: true,
-      passValid: true
+      user: {
+        full_name: '',
+        email: '',
+        pass: '',
+        full_nameValid: true,
+        emailValid: true,
+        passValid: true
+      },
+      phones: [{
+        number: '',
+        type: 'home',
+        isValid: true
+      }]
     });
 
     _defineProperty(_assertThisInitialized(_this), "setInputValue", function (name, value) {
-      _this.setState(_defineProperty({}, name, value), function () {
+      _this.setState(function (prevState) {
+        return {
+          user: _objectSpread(_objectSpread({}, prevState.user), {}, _defineProperty({}, name, value))
+        };
+      }, function () {
         _this.validateField(name, value);
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleDeletePhone", function (index) {
+      var phonesList = _toConsumableArray(_this.state.phones);
+
+      phonesList.splice(index, 1);
+
+      _this.setState({
+        phones: phonesList
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleAddPhone", function () {
+      var phonesList = _toConsumableArray(_this.state.phones);
+
+      phonesList.push({
+        number: '',
+        type: 'home'
+      });
+
+      _this.setState({
+        phones: phonesList
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "setPhoneValue", function (index, event) {
+      var _event$target = event.target,
+          value = _event$target.value,
+          type = _event$target.type;
+      var phoneProperty = type === 'text' ? 'number' : 'type';
+
+      var phonesList = _toConsumableArray(_this.state.phones);
+
+      phonesList[index][phoneProperty] = value;
+
+      _this.setState({
+        phones: phonesList
+      }, function () {
+        _this.validatePhoneField(phonesList, index, value);
       });
     });
 
@@ -78,44 +145,76 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
   }
 
   _createClass(UserForm, [{
-    key: "validateField",
-    value: function validateField(fieldName, value) {
-      var full_nameValid = this.state.full_nameValid;
-      var emailValid = this.state.emailValid;
-      var passValid = this.state.passValid;
-      var ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
-      var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
-      var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
+    key: "validatePhoneField",
+    value: function validatePhoneField(phoneList, index, value) {
       var ruleHomePhone = /^(?!0)\d{6}$/;
       var ruleMobPhone = /(^0\d{9}$)|(^3\d{11}$)/;
+      var phoneObj = phoneList[index];
+      var isValidPhone = true;
 
-      switch (fieldName) {
-        case "full_name":
-          full_nameValid = value.match(ruleName);
+      switch (phoneObj['type']) {
+        case 'home':
+          isValidPhone = ruleHomePhone.test(value);
           break;
 
-        case "email":
-          emailValid = value.match(ruleEmail);
-          break;
-
-        case "pass":
-          passValid = value.match(rulePass);
+        case 'mobile':
+          isValidPhone = ruleMobPhone.test(value);
           break;
 
         default:
           break;
       }
 
-      this.setState({
-        full_nameValid: full_nameValid,
-        emailValid: emailValid,
-        passValid: passValid
-      }); //, this.validateForm);
+      this.setState(function (prevState) {
+        return {
+          phones: prevState.phones.map(function (el, i) {
+            return i === index ? _objectSpread(_objectSpread({}, el), {}, {
+              isValid: isValidPhone
+            }) : el;
+          })
+        };
+      }); // console.log(isValidPhone);
+      // console.log(value);
+      //let result = [...this.state.phones];
+      //result.push(phoneObj);
+      //this.setState({ phones: result });
+    }
+  }, {
+    key: "validateField",
+    value: function validateField(fieldName, value) {
+      var isValid;
+      var validProperty = fieldName + 'Valid';
+      var ruleName = /^[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+\s+[а-яА-ЯіІїЇєЄґҐ']+$/;
+      var ruleEmail = /^(?!\.)([a-zA-Z0-9-.]+)(?<!\.)@(?!\.)([a-zA-Z0-9-.]+)\.([a-zA-Z0-9-.]+)(?<!\.)$/;
+      var rulePass = /^(?=^.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]*$/;
+
+      switch (fieldName) {
+        case 'full_name':
+          isValid = ruleName.test(value);
+          break;
+
+        case 'email':
+          isValid = ruleEmail.test(value);
+          break;
+
+        case 'pass':
+          isValid = rulePass.test(value);
+          break;
+
+        default:
+          break;
+      }
+
+      this.setState(function (prevState) {
+        return {
+          user: _objectSpread(_objectSpread({}, prevState.user), {}, _defineProperty({}, validProperty, isValid))
+        };
+      });
     }
   }, {
     key: "errorClass",
     value: function errorClass(error) {
-      return error ? '' : "is-invalid";
+      return error ? '' : 'is-invalid';
     }
   }, {
     key: "render",
@@ -127,13 +226,18 @@ var UserForm = /*#__PURE__*/function (_PureComponent) {
         role: "form"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Name, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.full_nameValid)
+        isError: this.errorClass(this.state.user.full_nameValid)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Email, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.emailValid)
+        isError: this.errorClass(this.state.user.emailValid)
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Password, {
         onChangedValue: this.setInputValue,
-        isError: this.errorClass(this.state.passValid)
+        isError: this.errorClass(this.state.user.passValid)
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(Phones, {
+        onChangedValue: this.setPhoneValue,
+        onDelete: this.handleDeletePhone,
+        onAdd: this.handleAddPhone,
+        phones: this.state.phones
       })));
     }
   }]);
@@ -267,7 +371,95 @@ var Password = /*#__PURE__*/function (_PureComponent4) {
   }]);
 
   return Password;
-}(react__WEBPACK_IMPORTED_MODULE_0__.PureComponent); // class Phones extends PureComponent {}
+}(react__WEBPACK_IMPORTED_MODULE_0__.PureComponent);
+
+var Phones = /*#__PURE__*/function (_PureComponent5) {
+  _inherits(Phones, _PureComponent5);
+
+  var _super5 = _createSuper(Phones);
+
+  function Phones() {
+    var _this5;
+
+    _classCallCheck(this, Phones);
+
+    for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+      args[_key5] = arguments[_key5];
+    }
+
+    _this5 = _super5.call.apply(_super5, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this5), "changedValue", function (e, i) {
+      _this5.props.onChangedValue(i, e);
+    });
+
+    _defineProperty(_assertThisInitialized(_this5), "handleDelete", function (index) {
+      _this5.props.onDelete(index);
+    });
+
+    _defineProperty(_assertThisInitialized(_this5), "handleAdd", function () {
+      _this5.props.onAdd();
+    });
+
+    _defineProperty(_assertThisInitialized(_this5), "createPhonesSection", function () {
+      var phonesSection = [];
+
+      _this5.props.phones.map(function (x, i) {
+        phonesSection.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+          className: "input-group mb-3"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+          type: "text",
+          className: "form-control",
+          name: "phone-number",
+          value: x.number,
+          onChange: function onChange(e) {
+            return _this5.changedValue(e, i);
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("select", {
+          className: "custom-select",
+          value: x.type,
+          onChange: function onChange(e) {
+            return _this5.changedValue(e, i);
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+          value: "home"
+        }, "\u0414\u043E\u043C\u0430\u0448\u043D\u0456\u0439"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+          value: "mobile"
+        }, "\u041C\u043E\u0431\u0456\u043B\u044C\u043D\u0438\u0439")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+          className: "input-group-append"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+          className: "btn btn-outline-secondary",
+          type: "button",
+          style: {
+            display: i >= 1 || _this5.props.phones.length > 1 ? 'block' : 'none'
+          },
+          onClick: function onClick() {
+            return _this5.handleDelete(i);
+          }
+        }, "\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438"), _this5.props.phones.length - 1 === i && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+          className: "btn btn-outline-secondary",
+          type: "button",
+          onClick: function onClick() {
+            return _this5.handleAdd();
+          }
+        }, "\u0414\u043E\u0434\u0430\u0442\u0438"))));
+      });
+
+      return phonesSection;
+    });
+
+    return _this5;
+  }
+
+  _createClass(Phones, [{
+    key: "render",
+    value: function render() {
+      return this.createPhonesSection();
+    }
+  }]);
+
+  return Phones;
+}(react__WEBPACK_IMPORTED_MODULE_0__.PureComponent);
 
 /***/ }),
 
